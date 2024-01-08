@@ -2,19 +2,22 @@
 pipeline{
   agent any
   stages{
-    stage('code checkout'){
+    stage('main'){
+      when{branch "main"}
       steps{
-        git branch: 'main', credentialsId: 'github', url: 'https://github.com/gopi5121/doctor-online'
+        echo"this is an main branch" 
       }
     }
-    stage('maven build'){
+    stage('develop'){
+      when{branch "develop"}
       steps{
-        sh "mvn clean package"
+        echo 'this is an develop branch'
       }
     }
     stage("tomcat deploy"){
+      when{branch "test"}
       steps{
-        TomcatDeploy("54.196.216.101","172.31.21.235",'ec2-user','doctor-online.war')
+        echo "this is an test branch"
       }
     }
   }
