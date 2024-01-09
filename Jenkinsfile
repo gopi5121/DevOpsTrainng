@@ -14,14 +14,19 @@ pipeline{
     }
     stage("upload artifacts"){
       steps{
-        nexusArtifactUploader artifacts: [[artifactId: 'doctor-online', classifier: '', file: 'target/doctor-online.war', type: 'war']], 
-          credentialsId: 'Nexus', 
-          groupId: 'in.javahome', 
-          nexusUrl: '172.31.32.247:8081', 
-          nexusVersion: 'nexus3', 
-          protocol: 'http', 
-          repository: 'do-snapshot', 
-          version: '1.4'
+        script{
+           def pom = readMavenPom file: 'pom.xml'
+           def version = pom.version
+           def repoName = veriosn.endswith("SNAPSHOT") ? "do-snapshot": "do-release"
+           nexusArtifactUploader artifacts: [[artifactId: 'doctor-online', classifier: '', file: 'target/doctor-online.war', type: 'war']], 
+             credentialsId: 'Nexus', 
+             groupId: 'in.javahome', 
+             nexusUrl: '172.31.32.247:8081', 
+             nexusVersion: 'nexus3', 
+             protocol: 'http', 
+             repository: repoName, 
+             version: version
+        }
       }
     }
     stage("tomcat deploy"){
