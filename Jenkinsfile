@@ -21,7 +21,7 @@ pipeline{
           nexusVersion: 'nexus3', 
           protocol: 'http', 
           repository: 'do-snapshot', 
-          version: '1.3'
+          version: '1.4'
       }
     }
     stage("tomcat deploy"){
